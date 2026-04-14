@@ -1,4 +1,4 @@
-import { CalendarDays } from "lucide-react";
+import { CalendarDays, Compass, Sparkles } from "lucide-react";
 
 import { BookingModal } from "@/components/forms/booking-modal";
 import { ButtonLink } from "@/components/ui/button-link";
@@ -14,12 +14,17 @@ import { buildMetadata } from "@/lib/utils";
 export const metadata = buildMetadata({
   title: "Book Online",
   description:
-    "View bookable services across advising, CV making, workshops, and selected courses.",
+    "Book Student Hub's current live study services, with the public rollout focused on major advising in Bahrain.",
   path: "/book-online",
 });
 
 const groupedServices = groupBookingServicesByCategory(bookingServices);
 const studyOnlyRollout = !isPhaseEnabled("train") && !isPhaseEnabled("work");
+const liveServiceCount = bookingServices.length;
+const liveOptionCount = bookingServices.reduce(
+  (count, service) => count + service.options.length,
+  0,
+);
 
 export default function BookOnlinePage() {
   return (
@@ -28,27 +33,49 @@ export default function BookOnlinePage() {
         eyebrow={studyOnlyRollout ? "Current live services" : "Book Online"}
         title={
           studyOnlyRollout
-            ? "Book Student Hub's current live study services."
+            ? "Book the live Study services available right now."
             : "One place to discover Student Hub's bookable services."
         }
         description={
           studyOnlyRollout
-            ? "The current public booking experience is focused on major advising while the Train and Work services remain temporarily hidden from the public release."
+            ? "Student Hub is keeping the public booking layer intentionally focused on major advising first. That means the current experience is easier to understand, more credible, and better aligned with the live Study release."
             : "This page gathers advisory sessions, CV support, workshops, and selected courses into one booking-friendly experience."
         }
-        actions={[{ href: "/contact", label: "Need a custom request?", variant: "ghost" }]}
+        actions={[
+          { href: "/study/major-advising", label: "Explore major advising", variant: "primary" },
+          { href: "/contact", label: "Contact Student Hub", variant: "ghost" },
+        ]}
         aside={
           <div className="surface-card rounded-[32px] p-6 sm:p-8">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand">
               Service view
             </p>
             <h2 className="mt-4 font-display text-3xl font-semibold tracking-tight text-ink">
-              Premium but still accessible.
+              A focused booking layer feels more trustworthy.
             </h2>
             <p className="mt-4 text-sm leading-7 text-ink-muted">
-              Booking flows are demo-ready today and can later connect to payment,
-              availability, and account history.
+              Users can already browse live advising options, compare session lengths, and send a booking request without sorting through unfinished categories.
             </p>
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              <div className="rounded-[24px] border border-border bg-surface-muted px-4 py-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+                  Live services
+                </p>
+                <p className="mt-2 text-2xl font-semibold tracking-tight text-ink">
+                  {liveServiceCount}
+                </p>
+                <p className="mt-1 text-sm text-ink-muted">bookable advisor profiles</p>
+              </div>
+              <div className="rounded-[24px] border border-border bg-surface-muted px-4 py-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+                  Session options
+                </p>
+                <p className="mt-2 text-2xl font-semibold tracking-tight text-ink">
+                  {liveOptionCount}
+                </p>
+                <p className="mt-1 text-sm text-ink-muted">clear pricing tiers across advisors</p>
+              </div>
+            </div>
           </div>
         }
       />
@@ -60,10 +87,14 @@ export default function BookOnlinePage() {
               <div key={category} className="space-y-6">
                 <SectionHeading
                   eyebrow="Bookable services"
-                  title={category}
+                  title={
+                    studyOnlyRollout
+                      ? "Major advising is the live booking layer right now."
+                      : category
+                  }
                   description={
                     studyOnlyRollout
-                      ? "Major advising is currently the only public booking service while the next phases are temporarily hidden."
+                      ? "This public booking experience is intentionally narrow for now, which makes it easier for users to understand what is live and what comes next."
                       : "Mock pricing and service details are included to make the MVP feel genuinely bookable."
                   }
                 />
@@ -73,7 +104,11 @@ export default function BookOnlinePage() {
                       <div className="surface-card rounded-[28px] p-6">
                         <div className="flex items-start justify-between gap-4">
                           <div>
-                            <h3 className="font-display text-2xl font-semibold tracking-tight text-ink">
+                            <div className="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
+                              <Sparkles className="h-3.5 w-3.5" />
+                              Study live service
+                            </div>
+                            <h3 className="mt-4 font-display text-2xl font-semibold tracking-tight text-ink">
                               {service.title}
                             </h3>
                             <p className="mt-3 text-sm leading-7 text-ink-muted">
@@ -92,6 +127,16 @@ export default function BookOnlinePage() {
                           <div className="rounded-[22px] border border-border bg-surface-muted px-4 py-3">
                             <p className="font-semibold text-ink">Price summary</p>
                             <p className="mt-1">{service.priceSummary}</p>
+                          </div>
+                        </div>
+                        <div className="mt-5 rounded-[24px] border border-border bg-white px-4 py-4 text-sm leading-7 text-ink-muted">
+                          <div className="flex items-start gap-3">
+                            <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand">
+                              <Compass className="h-4 w-4" />
+                            </div>
+                            <p>
+                              Each advisor keeps multiple session lengths visible so users can choose lighter guidance or a deeper session without guessing the next step.
+                            </p>
                           </div>
                         </div>
                         <div className="mt-6 flex flex-wrap gap-3">

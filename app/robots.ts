@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { disabledPhaseSlugs } from "@/data/feature-flags";
+import { getSiteUrl } from "@/lib/utils";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -9,6 +10,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: disabledPhaseSlugs.map((slug) => `/${slug}`),
     },
-    sitemap: "https://studenthub.bh/sitemap.xml",
+    sitemap: getSiteUrl("/sitemap.xml"),
   };
 }

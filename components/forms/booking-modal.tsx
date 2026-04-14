@@ -2,7 +2,15 @@
 
 import { type FormEvent, useEffect, useId, useRef, useState } from "react";
 
-import { CalendarDays, CheckCircle2, Clock3, Mail, WalletCards, X } from "lucide-react";
+import {
+  CalendarDays,
+  CheckCircle2,
+  Clock3,
+  Mail,
+  ShieldCheck,
+  WalletCards,
+  X,
+} from "lucide-react";
 
 import type { BookingOption } from "@/data/types";
 import {
@@ -36,7 +44,7 @@ export function BookingModal({
   description,
   options,
   sourcePath,
-  triggerLabel = "Book now",
+  triggerLabel = "Book session",
   className,
 }: BookingModalProps) {
   const [open, setOpen] = useState(false);
@@ -168,16 +176,16 @@ export function BookingModal({
           setReceipt(null);
         }}
         className={cn(
-          "inline-flex items-center justify-center gap-2 rounded-full border border-ink bg-ink px-5 py-3 text-sm font-semibold text-white transition hover:bg-ink-soft",
+          "inline-flex items-center justify-center gap-2 rounded-full border border-brand-deep bg-brand px-5 py-3 text-sm font-semibold text-ink shadow-[0_18px_36px_rgba(228,178,0,0.22)] transition duration-200 hover:-translate-y-0.5 hover:bg-brand-soft hover:shadow-[0_22px_40px_rgba(228,178,0,0.28)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/25 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
           className,
         )}
       >
-        <CalendarDays className="h-4 w-4 text-brand" />
+        <CalendarDays className="h-4 w-4 text-ink/75" />
         {triggerLabel}
       </button>
       {open ? (
         <div
-          className="fixed inset-0 z-[70] flex items-center justify-center bg-black/55 p-4"
+          className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 p-4"
           onMouseDown={(event) => {
             if (event.target === event.currentTarget) {
               closeModal();
@@ -204,16 +212,13 @@ export function BookingModal({
                 >
                   {title}
                 </h3>
-                <p
-                  id={descriptionId}
-                  className="text-sm leading-7 text-ink-muted"
-                >
+                <p id={descriptionId} className="text-sm leading-7 text-ink-muted">
                   {description}
                 </p>
               </div>
               <button
                 type="button"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border text-ink transition hover:border-ink"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-white text-ink transition hover:border-ink"
                 aria-label="Close booking modal"
                 onClick={closeModal}
               >
@@ -225,9 +230,10 @@ export function BookingModal({
               <form className="grid gap-4" onSubmit={handleSubmit}>
                 {options.length > 1 ? (
                   <fieldset className="grid gap-3">
-                    <legend className="text-sm font-medium text-ink">
-                      Select a package
-                    </legend>
+                    <legend className="text-sm font-semibold text-ink">Choose a session</legend>
+                    <p className="text-sm leading-7 text-ink-muted">
+                      Select the duration that best matches the level of support you need.
+                    </p>
                     {options.map((option, index) => (
                       <label key={option.id} className="block">
                         <input
@@ -238,18 +244,16 @@ export function BookingModal({
                           defaultChecked={index === 0}
                           className="peer sr-only"
                         />
-                        <div className="rounded-[24px] border border-border bg-white p-4 transition peer-checked:border-brand peer-checked:bg-brand/8">
+                        <div className="rounded-[24px] border-2 border-border bg-white p-4 shadow-[0_10px_24px_rgba(17,17,17,0.04)] transition duration-200 peer-checked:border-brand-deep peer-checked:bg-brand/10 peer-checked:shadow-[0_18px_36px_rgba(228,178,0,0.16)]">
                           <div className="flex flex-wrap items-start justify-between gap-3">
                             <div>
-                              <p className="text-sm font-semibold text-ink">
-                                {option.label}
-                              </p>
+                              <p className="text-sm font-semibold text-ink">{option.label}</p>
                               <div className="mt-2 flex flex-wrap gap-3 text-xs text-ink-muted">
-                                <span className="inline-flex items-center gap-1.5">
+                                <span className="inline-flex items-center gap-1.5 rounded-full border border-brand/20 bg-brand/10 px-3 py-1 font-medium text-ink">
                                   <Clock3 className="h-3.5 w-3.5 text-brand" />
                                   {option.duration}
                                 </span>
-                                <span className="inline-flex items-center gap-1.5">
+                                <span className="inline-flex items-center gap-1.5 rounded-full border border-brand/20 bg-brand/10 px-3 py-1 font-medium text-ink">
                                   <WalletCards className="h-3.5 w-3.5 text-brand" />
                                   {option.price}
                                 </span>
@@ -257,9 +261,7 @@ export function BookingModal({
                             </div>
                           </div>
                           {option.note ? (
-                            <p className="mt-3 text-xs leading-6 text-ink-muted">
-                              {option.note}
-                            </p>
+                            <p className="mt-3 text-xs leading-6 text-ink-muted">{option.note}</p>
                           ) : null}
                         </div>
                       </label>
@@ -267,33 +269,36 @@ export function BookingModal({
                   </fieldset>
                 ) : options[0] ? (
                   <>
-                    <input
-                      type="hidden"
-                      name="bookingOptionId"
-                      value={options[0].id}
-                    />
-                    <div className="rounded-[24px] border border-brand/25 bg-brand/10 p-4">
-                      <p className="text-sm font-semibold text-ink">
-                        {options[0].label}
-                      </p>
+                    <input type="hidden" name="bookingOptionId" value={options[0].id} />
+                    <div className="rounded-[24px] border-2 border-brand/30 bg-brand/10 p-4 shadow-[0_16px_30px_rgba(228,178,0,0.12)]">
+                      <p className="text-sm font-semibold text-ink">{options[0].label}</p>
                       <div className="mt-2 flex flex-wrap gap-3 text-xs text-ink-muted">
-                        <span className="inline-flex items-center gap-1.5">
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-brand/20 bg-white/70 px-3 py-1 font-medium text-ink">
                           <Clock3 className="h-3.5 w-3.5 text-brand" />
                           {options[0].duration}
                         </span>
-                        <span className="inline-flex items-center gap-1.5">
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-brand/20 bg-white/70 px-3 py-1 font-medium text-ink">
                           <WalletCards className="h-3.5 w-3.5 text-brand" />
                           {options[0].price}
                         </span>
                       </div>
                       {options[0].note ? (
-                        <p className="mt-3 text-xs leading-6 text-ink-muted">
-                          {options[0].note}
-                        </p>
+                        <p className="mt-3 text-xs leading-6 text-ink-muted">{options[0].note}</p>
                       ) : null}
                     </div>
                   </>
                 ) : null}
+
+                <div className="rounded-[24px] border border-brand/18 bg-brand/6 px-4 py-4 text-sm leading-7 text-ink-muted">
+                  <div className="flex items-start gap-3">
+                    <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-brand shadow-[0_10px_18px_rgba(17,17,17,0.08)]">
+                      <ShieldCheck className="h-4 w-4" />
+                    </div>
+                    <p>
+                      This preview captures your request clearly. In the live release, the next step would continue into confirmation, payment, and calendar availability.
+                    </p>
+                  </div>
+                </div>
 
                 <label className="grid gap-2 text-sm font-medium text-ink">
                   Full name
@@ -303,7 +308,7 @@ export function BookingModal({
                     type="text"
                     autoComplete="name"
                     data-autofocus="true"
-                    className="rounded-2xl border border-border px-4 py-3 outline-none transition focus:border-brand"
+                    className="rounded-2xl border border-border bg-white px-4 py-3 outline-none transition focus:border-brand"
                     placeholder="Your name"
                   />
                 </label>
@@ -316,7 +321,7 @@ export function BookingModal({
                       name="email"
                       type="email"
                       autoComplete="email"
-                      className="w-full rounded-2xl border border-border py-3 pl-11 pr-4 outline-none transition focus:border-brand"
+                      className="w-full rounded-2xl border border-border bg-white py-3 pl-11 pr-4 outline-none transition focus:border-brand"
                       placeholder="you@example.com"
                     />
                   </div>
@@ -326,7 +331,7 @@ export function BookingModal({
                   <textarea
                     name="notes"
                     rows={4}
-                    className="rounded-2xl border border-border px-4 py-3 outline-none transition focus:border-brand"
+                    className="rounded-2xl border border-border bg-white px-4 py-3 outline-none transition focus:border-brand"
                     placeholder="Share what you need help with."
                   />
                 </label>
@@ -344,14 +349,14 @@ export function BookingModal({
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="rounded-full border border-brand bg-brand px-5 py-3 text-sm font-semibold text-ink transition hover:bg-brand-soft disabled:cursor-not-allowed disabled:opacity-70"
+                    className="rounded-full border border-brand-deep bg-brand px-5 py-3 text-sm font-semibold text-ink shadow-[0_16px_32px_rgba(228,178,0,0.2)] transition hover:bg-brand-soft disabled:cursor-not-allowed disabled:opacity-70"
                   >
-                    {isSubmitting ? "Submitting..." : "Submit booking request"}
+                    {isSubmitting ? "Submitting..." : "Send booking request"}
                   </button>
                   <button
                     type="button"
                     onClick={closeModal}
-                    className="rounded-full border border-border px-5 py-3 text-sm font-semibold text-ink transition hover:border-ink"
+                    className="rounded-full border border-border bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:border-ink"
                   >
                     Cancel
                   </button>
@@ -363,11 +368,11 @@ export function BookingModal({
                 aria-live="polite"
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-brand">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-brand shadow-[0_12px_24px_rgba(17,17,17,0.08)]">
                     <CheckCircle2 className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="font-semibold text-ink">Demo booking captured</p>
+                    <p className="font-semibold text-ink">Booking request captured</p>
                     <p className="text-xs uppercase tracking-[0.18em] text-ink-muted">
                       {receipt.reference}
                     </p>
@@ -375,9 +380,7 @@ export function BookingModal({
                 </div>
                 <p className="mt-4">{receipt.message}</p>
                 <p className="mt-2 text-sm text-ink-muted">
-                  Submitted at {receipt.submittedAt}. In the live product this
-                  would continue into confirmation, payment, and calendar
-                  booking.
+                  Submitted at {receipt.submittedAt}. The live product would continue into confirmation, payment, and calendar booking.
                 </p>
                 <div className="mt-5 flex flex-wrap gap-3">
                   <button
@@ -386,14 +389,14 @@ export function BookingModal({
                       setReceipt(null);
                       setError(null);
                     }}
-                    className="rounded-full border border-border bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:border-ink"
+                    className="rounded-full border border-brand-deep bg-brand px-5 py-3 text-sm font-semibold text-ink transition hover:bg-brand-soft"
                   >
-                    Book another option
+                    Book another session
                   </button>
                   <button
                     type="button"
                     onClick={closeModal}
-                    className="rounded-full border border-ink bg-ink px-5 py-3 text-sm font-semibold text-white transition hover:bg-ink-soft"
+                    className="rounded-full border border-border bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:border-ink"
                   >
                     Close
                   </button>

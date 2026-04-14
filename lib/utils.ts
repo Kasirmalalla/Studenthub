@@ -32,6 +32,18 @@ export function formatCurrency(value: string | number) {
   return `${value.toFixed(0)} BHD`;
 }
 
+export function getSiteUrl(path = "/") {
+  const base =
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    process.env.VERCEL_PROJECT_PRODUCTION_URL ??
+    process.env.VERCEL_URL ??
+    "http://localhost:3000";
+
+  const normalizedBase = base.startsWith("http") ? base : `https://${base}`;
+
+  return new URL(path, normalizedBase).toString();
+}
+
 export function buildMetadata({
   title,
   description,
@@ -42,7 +54,7 @@ export function buildMetadata({
   path?: string;
 }): Metadata {
   const fullTitle = `${title} | Student Hub`;
-  const url = `https://studenthub.bh${path}`;
+  const url = getSiteUrl(path || "/");
 
   return {
     title: fullTitle,

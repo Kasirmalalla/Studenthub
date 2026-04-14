@@ -17,7 +17,7 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-black/5 bg-white/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-black/5 bg-white/88 backdrop-blur-xl">
       <Container className="flex min-h-20 items-center justify-between gap-6">
         <BrandMark compact />
         <nav className="hidden items-center gap-2 lg:flex">
@@ -28,7 +28,7 @@ export function SiteHeader() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "pill-tab rounded-full px-4 py-2 text-sm font-medium transition hover:text-ink",
+                  "pill-tab rounded-full px-4 py-2 text-sm font-medium transition hover:border-brand/30 hover:text-ink",
                   active ? "border-brand/30 bg-brand/12 text-ink" : "text-ink-muted",
                 )}
               >
@@ -38,13 +38,13 @@ export function SiteHeader() {
           })}
         </nav>
         <div className="hidden lg:block">
-          <ButtonLink href="/book-online" variant="dark">
-            Book Online
+          <ButtonLink href="/book-online" variant="primary">
+            Book Advising
           </ButtonLink>
         </div>
         <button
           type="button"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border text-ink lg:hidden"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-white text-ink lg:hidden"
           aria-expanded={open}
           aria-label="Toggle navigation"
           onClick={() => setOpen((value) => !value)}
@@ -65,8 +65,8 @@ export function SiteHeader() {
                 {item.label}
               </Link>
             ))}
-            <ButtonLink href="/book-online" variant="dark" className="mt-2">
-              Book Online
+            <ButtonLink href="/book-online" variant="primary" className="mt-2">
+              Book Advising
             </ButtonLink>
           </Container>
         </div>

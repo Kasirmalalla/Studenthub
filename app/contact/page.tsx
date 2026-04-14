@@ -1,4 +1,4 @@
-import { Mail, MapPin, MessageSquareText } from "lucide-react";
+import { Compass, MapPin, MessageSquareText } from "lucide-react";
 
 import { DemoForm } from "@/components/forms/demo-form";
 import { Container } from "@/components/ui/container";
@@ -10,7 +10,7 @@ import { buildMetadata } from "@/lib/utils";
 export const metadata = buildMetadata({
   title: "Contact",
   description:
-    "Contact Student Hub for general inquiries, partnerships, or early access interest.",
+    "Contact Student Hub about advising, partnerships, launch updates, or study-related questions.",
   path: "/contact",
 });
 
@@ -19,8 +19,8 @@ export default function ContactPage() {
     <>
       <PageHero
         eyebrow="Contact Student Hub"
-        title="A polished entry point for questions, partnerships, and early interest."
-        description="Use this contact page to reach Student Hub about advising, future partnerships, platform interest, or launch-related conversations."
+        title="A clear contact point for advising, partnerships, and launch questions."
+        description="Use this page when you want to ask about Student Hub, request advising help, discuss a partnership, or stay informed about upcoming phases."
       />
 
       <section className="section-wrap pt-0">
@@ -34,18 +34,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-ink">Location</p>
-                    <p className="text-sm text-ink-muted">Bahrain-based platform</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand/12 text-brand">
-                    <Mail className="h-6 w-6" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-ink">Email</p>
-                    <p className="text-sm text-ink-muted">
-                      hello@studenthub.demo
-                    </p>
+                    <p className="text-sm text-ink-muted">Bahrain-based founder-led platform</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -53,12 +42,20 @@ export default function ContactPage() {
                     <MessageSquareText className="h-6 w-6" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-ink">
-                      Social placeholders
-                    </p>
+                    <p className="text-sm font-semibold text-ink">Best way to reach now</p>
                     <p className="text-sm text-ink-muted">
-                      Instagram and LinkedIn placeholders are ready in the
-                      footer.
+                      Use the contact form on this page while direct inbox and social channels are finalized.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand/12 text-brand">
+                    <Compass className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-ink">Current release</p>
+                    <p className="text-sm text-ink-muted">
+                      Study is live now, while Train and Work remain behind the current rollout gate.
                     </p>
                   </div>
                 </div>
@@ -69,9 +66,9 @@ export default function ContactPage() {
             <DemoForm
               formId="contact"
               title="Send a message"
-              description="This form is frontend-only for the MVP, but it is designed to feel trustworthy and complete."
+              description="This form is still a demo flow, but it is designed to represent the real inquiry experience Student Hub will use at launch."
               submitLabel="Send inquiry"
-              successMessage="Your inquiry has been captured in this demo flow. In the live version, this would route into email or CRM handling."
+              successMessage="Your inquiry has been captured in this demo flow. In the live version, this would route into a real inbox or CRM workflow."
               fields={[
                 { name: "name", label: "Full name", placeholder: "Your name" },
                 {
@@ -86,10 +83,10 @@ export default function ContactPage() {
                   type: "select",
                   options: [
                     "General inquiry",
-                    "Partnership",
-                    "Advising",
-                    "Training",
-                    "Work opportunities",
+                    "Major advising",
+                    "Partnership or school collaboration",
+                    "Study feature feedback",
+                    "Launch updates",
                   ],
                 },
                 {

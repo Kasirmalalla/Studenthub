@@ -4,9 +4,10 @@ import { isPhaseEnabled } from "@/data/feature-flags";
 import { universities } from "@/data/study";
 import { courses, internships, workshops } from "@/data/train";
 import { cvExperts, jobs } from "@/data/work";
+import { getSiteUrl } from "@/lib/utils";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://studenthub.bh";
+  const baseUrl = getSiteUrl("/").replace(/\/$/, "");
 
   const staticRoutes = [
     "",
@@ -29,11 +30,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...(isPhaseEnabled("work") ? ["/work", "/work/jobs", "/work/cv-making"] : []),
     "/book-online",
     "/contact",
-    "/login",
-    "/sign-up",
-    "/my-account",
-    "/my-bookings",
-    "/my-wallet",
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
