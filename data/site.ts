@@ -9,16 +9,23 @@ import type {
   RouteHighlight,
   Stat,
 } from "@/data/types";
+import { isPhaseEnabled } from "@/data/feature-flags";
 
-export const navItems: NavItem[] = [
+type PhaseTagged<T> = T & { phase?: Phase["slug"] };
+
+const allNavItems: Array<PhaseTagged<NavItem>> = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
-  { label: "Study", href: "/study" },
-  { label: "Train", href: "/train" },
-  { label: "Work", href: "/work" },
+  { label: "Study", href: "/study", phase: "study" },
+  { label: "Train", href: "/train", phase: "train" },
+  { label: "Work", href: "/work", phase: "work" },
   { label: "Book Online", href: "/book-online" },
   { label: "Contact", href: "/contact" },
 ];
+
+export const navItems: NavItem[] = allNavItems
+  .filter((item) => !item.phase || isPhaseEnabled(item.phase))
+  .map((item) => ({ label: item.label, href: item.href }));
 
 export const footerLinks: NavItem[] = [
   { label: "Login", href: "/login" },
@@ -28,7 +35,7 @@ export const footerLinks: NavItem[] = [
   { label: "My Wallet", href: "/my-wallet" },
 ];
 
-export const phases: Phase[] = [
+const allPhases: Phase[] = [
   {
     slug: "study",
     name: "Study",
@@ -58,8 +65,16 @@ export const phases: Phase[] = [
   },
 ];
 
+export const phases = allPhases.filter((phase) => isPhaseEnabled(phase.slug));
+
+const activePhaseCount = phases.length;
+const studyOnlyRollout = !isPhaseEnabled("train") && !isPhaseEnabled("work");
+
 export const homeStats: Stat[] = [
-  { label: "Career phases", value: "3 connected stages" },
+  {
+    label: "Rollout mode",
+    value: studyOnlyRollout ? "Study-first release" : `${activePhaseCount} active stages`,
+  },
   { label: "Launch focus", value: "Bahrain-first MVP" },
   { label: "Experience goal", value: "Guided, credible, premium" },
   { label: "Founder model", value: "Founder-led by Kasir" },
@@ -67,33 +82,52 @@ export const homeStats: Stat[] = [
 
 export const homeHeroMetrics: HeroMetric[] = [
   { label: "Launch market", value: "Bahrain" },
-  { label: "Journey model", value: "Study → Train → Work" },
-  { label: "Service posture", value: "Premium and practical" },
+  {
+    label: "Rollout mode",
+    value: studyOnlyRollout ? "Study-first launch" : "Multi-phase platform",
+  },
+  {
+    label: "Current public phase",
+    value: studyOnlyRollout ? "Study" : "Study, Train, and Work",
+  },
 ];
 
-export const journeySteps: JourneyStep[] = [
+const allJourneySteps: Array<JourneyStep & { slug: Phase["slug"] }> = [
   {
+    slug: "study",
     phase: "01",
     title: "Choose with better information",
     description:
       "Students start with university discovery, major comparison, and market awareness before they commit.",
-    detail: "This reduces guesswork at the point where academic choices shape career direction.",
+    detail:
+      "This reduces guesswork at the point where academic choices shape career direction.",
   },
   {
+    slug: "train",
     phase: "02",
     title: "Build readiness through real exposure",
     description:
       "Courses, internships, Tamkeen-supported programs, and workshops help turn ambition into usable skill.",
-    detail: "The middle phase is designed to make graduates more capable before they begin applying.",
+    detail:
+      "The middle phase is designed to make graduates more capable before they begin applying.",
   },
   {
+    slug: "work",
     phase: "03",
     title: "Move into work with more visibility",
     description:
       "Job listings, CV making, and interview-booking concepts create a more guided transition into employment.",
-    detail: "The final phase keeps employability support visible instead of leaving graduates to self-navigate.",
+    detail:
+      "The final phase keeps employability support visible instead of leaving graduates to self-navigate.",
   },
 ];
+
+export const journeySteps: JourneyStep[] = allJourneySteps
+  .filter((step) => isPhaseEnabled(step.slug))
+  .map((step, index) => ({
+    ...step,
+    phase: `0${index + 1}`,
+  }));
 
 export const studyArchitecture: RouteHighlight[] = [
   {
@@ -103,7 +137,7 @@ export const studyArchitecture: RouteHighlight[] = [
       "Browse Bahrain universities through a structure built for later GCC expansion.",
     href: "/study/universities",
     kicker: "University discovery",
-    detail: "University → College → Major",
+    detail: "University -> College -> Major",
   },
   {
     icon: "compare",
@@ -134,7 +168,7 @@ export const studyArchitecture: RouteHighlight[] = [
   },
 ];
 
-export const trainArchitecture: RouteHighlight[] = [
+const allTrainArchitecture: RouteHighlight[] = [
   {
     icon: "institutions",
     title: "Institutions and Internships",
@@ -182,7 +216,9 @@ export const trainArchitecture: RouteHighlight[] = [
   },
 ];
 
-export const workArchitecture: RouteHighlight[] = [
+export const trainArchitecture = isPhaseEnabled("train") ? allTrainArchitecture : [];
+
+const allWorkArchitecture: RouteHighlight[] = [
   {
     icon: "job",
     title: "Apply for a Job",
@@ -203,6 +239,8 @@ export const workArchitecture: RouteHighlight[] = [
   },
 ];
 
+export const workArchitecture = isPhaseEnabled("work") ? allWorkArchitecture : [];
+
 export const platformPrinciples: FeaturePreview[] = [
   {
     title: "Structured direction",
@@ -221,44 +259,66 @@ export const platformPrinciples: FeaturePreview[] = [
   },
 ];
 
-export const featurePreviews: FeaturePreview[] = [
+const allFeaturePreviews: Array<PhaseTagged<FeaturePreview>> = [
   {
+    phase: "study",
     title: "Universities",
-    description: "Browse Bahrain universities, faculties, and majors in a structure built to grow across the GCC.",
+    description:
+      "Browse Bahrain universities, faculties, and majors in a structure built to grow across the GCC.",
   },
   {
+    phase: "study",
     title: "University Comparison",
-    description: "Compare two study paths side by side across fees, requirements, study plans, and student feedback.",
+    description:
+      "Compare two study paths side by side across fees, requirements, study plans, and student feedback.",
   },
   {
+    phase: "study",
     title: "Market Insights",
-    description: "See placeholder demand signals that help users choose majors with more awareness of market needs.",
+    description:
+      "See placeholder demand signals that help users choose majors with more awareness of market needs.",
   },
   {
+    phase: "study",
     title: "Major Advising",
-    description: "Book paid advising sessions with specialists who can translate options into next steps.",
+    description:
+      "Book paid advising sessions with specialists who can translate options into next steps.",
   },
   {
+    phase: "train",
     title: "Courses",
-    description: "Find practical courses across languages, software, school support, and creative skills.",
+    description:
+      "Find practical courses across languages, software, school support, and creative skills.",
   },
   {
+    phase: "train",
     title: "Internships",
-    description: "Explore real-world opportunities that give fresh graduates experience before full-time roles.",
+    description:
+      "Explore real-world opportunities that give fresh graduates experience before full-time roles.",
   },
   {
+    phase: "train",
     title: "Workshops",
-    description: "Join premium workshop experiences and request new workshop topics when supply does not yet exist.",
+    description:
+      "Join premium workshop experiences and request new workshop topics when supply does not yet exist.",
   },
   {
+    phase: "work",
     title: "Jobs",
-    description: "Access graduate-friendly job opportunities with a clearer application and interview flow.",
+    description:
+      "Access graduate-friendly job opportunities with a clearer application and interview flow.",
   },
   {
+    phase: "work",
     title: "CV Making",
-    description: "Book resume experts who can shape a stronger professional story for job applications.",
+    description:
+      "Book resume experts who can shape a stronger professional story for job applications.",
   },
 ];
+
+export const featurePreviews: FeaturePreview[] = allFeaturePreviews
+  .filter((feature) => !feature.phase || isPhaseEnabled(feature.phase))
+  .map((feature) => ({ title: feature.title, description: feature.description }));
 
 export const founder: Founder = {
   name: "Kasir",

@@ -7,6 +7,7 @@ import { PageHero } from "@/components/ui/page-hero";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { bookingServices } from "@/data/bookings";
+import { isPhaseEnabled } from "@/data/feature-flags";
 import { groupBookingServicesByCategory } from "@/lib/bookings";
 import { buildMetadata } from "@/lib/utils";
 
@@ -18,14 +19,23 @@ export const metadata = buildMetadata({
 });
 
 const groupedServices = groupBookingServicesByCategory(bookingServices);
+const studyOnlyRollout = !isPhaseEnabled("train") && !isPhaseEnabled("work");
 
 export default function BookOnlinePage() {
   return (
     <>
       <PageHero
-        eyebrow="Book Online"
-        title="One place to discover Student Hub's bookable services."
-        description="This page gathers advisory sessions, CV support, workshops, and selected courses into one booking-friendly experience."
+        eyebrow={studyOnlyRollout ? "Current live services" : "Book Online"}
+        title={
+          studyOnlyRollout
+            ? "Book Student Hub's current live study services."
+            : "One place to discover Student Hub's bookable services."
+        }
+        description={
+          studyOnlyRollout
+            ? "The current public booking experience is focused on major advising while the Train and Work services remain temporarily hidden from the public release."
+            : "This page gathers advisory sessions, CV support, workshops, and selected courses into one booking-friendly experience."
+        }
         actions={[{ href: "/contact", label: "Need a custom request?", variant: "ghost" }]}
         aside={
           <div className="surface-card rounded-[32px] p-6 sm:p-8">
@@ -36,8 +46,8 @@ export default function BookOnlinePage() {
               Premium but still accessible.
             </h2>
             <p className="mt-4 text-sm leading-7 text-ink-muted">
-              Booking flows are demo-ready today and can later connect to
-              payment, availability, and account history.
+              Booking flows are demo-ready today and can later connect to payment,
+              availability, and account history.
             </p>
           </div>
         }
@@ -51,7 +61,11 @@ export default function BookOnlinePage() {
                 <SectionHeading
                   eyebrow="Bookable services"
                   title={category}
-                  description="Mock pricing and service details are included to make the MVP feel genuinely bookable."
+                  description={
+                    studyOnlyRollout
+                      ? "Major advising is currently the only public booking service while the next phases are temporarily hidden."
+                      : "Mock pricing and service details are included to make the MVP feel genuinely bookable."
+                  }
                 />
                 <div className="grid gap-4 lg:grid-cols-2">
                   {items.map((service, index) => (
@@ -76,9 +90,7 @@ export default function BookOnlinePage() {
                             <p className="mt-1">{service.durationSummary}</p>
                           </div>
                           <div className="rounded-[22px] border border-border bg-surface-muted px-4 py-3">
-                            <p className="font-semibold text-ink">
-                              Price summary
-                            </p>
+                            <p className="font-semibold text-ink">Price summary</p>
                             <p className="mt-1">{service.priceSummary}</p>
                           </div>
                         </div>

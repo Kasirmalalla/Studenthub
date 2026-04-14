@@ -4,13 +4,17 @@ import type { Metadata, Viewport } from "next";
 
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { isPhaseEnabled } from "@/data/feature-flags";
 
 import "./globals.css";
 
+const studyOnlyRollout = !isPhaseEnabled("train") && !isPhaseEnabled("work");
+
 export const metadata: Metadata = {
   title: "Student Hub",
-  description:
-    "Student Hub helps students and fresh graduates move from study choices to training opportunities and into work with more clarity.",
+  description: studyOnlyRollout
+    ? "Student Hub is currently launching with Study first, helping students choose universities, majors, and advising paths with more clarity in Bahrain."
+    : "Student Hub helps students and fresh graduates move from study choices to training opportunities and into work with more clarity.",
   metadataBase: new URL("https://studenthub.bh"),
 };
 
@@ -24,7 +28,9 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
     <html lang="en">
       <body className="site-shell">
         <div className="border-b border-black/5 bg-ink px-4 py-3 text-center text-xs font-medium uppercase tracking-[0.22em] text-white sm:text-sm">
-          Bahrain-first guidance for study, training, and work transitions
+          {studyOnlyRollout
+            ? "Bahrain-first guidance for choosing universities, majors, and next study steps"
+            : "Bahrain-first guidance for study, training, and work transitions"}
         </div>
         <SiteHeader />
         <main>{children}</main>

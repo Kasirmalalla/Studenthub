@@ -1,6 +1,7 @@
 import { Flag, Globe2, Milestone, Target } from "lucide-react";
 
 import { founder, roadmap } from "@/data/site";
+import { isPhaseEnabled } from "@/data/feature-flags";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Container } from "@/components/ui/container";
 import { PageHero } from "@/components/ui/page-hero";
@@ -10,9 +11,37 @@ import { buildMetadata } from "@/lib/utils";
 
 export const metadata = buildMetadata({
   title: "About",
-  description: "Learn what Student Hub is, why it exists, and how the three-phase journey is designed to work.",
+  description:
+    "Learn what Student Hub is, why it exists, and how the three-phase journey is designed to work.",
   path: "/about",
 });
+
+const studyOnlyRollout = !isPhaseEnabled("train") && !isPhaseEnabled("work");
+
+const modelCards = [
+  {
+    icon: Milestone,
+    title: "Study",
+    status: "Live now",
+    copy: "University discovery, university comparison, Bahrain market awareness, and major advising help users make better early choices.",
+  },
+  {
+    icon: Flag,
+    title: "Train",
+    status: isPhaseEnabled("train") ? "Live now" : "Temporarily hidden",
+    copy: isPhaseEnabled("train")
+      ? "Courses, internships, workshops, and Tamkeen-supported programs help students gain practical capability before applying for work."
+      : "The Train phase is part of the broader Student Hub model, but it is temporarily hidden while the public release focuses on Study first.",
+  },
+  {
+    icon: Globe2,
+    title: "Work",
+    status: isPhaseEnabled("work") ? "Live now" : "Temporarily hidden",
+    copy: isPhaseEnabled("work")
+      ? "Job listings, CV services, and interview-booking concepts help graduates move into work with stronger preparation."
+      : "The Work phase remains part of the long-term platform model, but it is temporarily hidden while Student Hub deepens the Study experience.",
+  },
+];
 
 export default function AboutPage() {
   return (
@@ -20,14 +49,20 @@ export default function AboutPage() {
       <PageHero
         eyebrow="About Student Hub"
         title="A founder-led platform built to make education and career decisions feel more structured."
-        description="Student Hub exists because too many students and fresh graduates move through major decisions, skill-building, and job searching without enough connected guidance. The platform is designed to close those gaps."
+        description={
+          studyOnlyRollout
+            ? "Student Hub is designed as a three-phase platform, but the current public release is intentionally focused on Study first. The goal is to make the earliest academic decisions stronger before reopening the Train and Work phases."
+            : "Student Hub exists because too many students and fresh graduates move through major decisions, skill-building, and job searching without enough connected guidance. The platform is designed to close those gaps."
+        }
         actions={[
           { href: "/study", label: "Explore the Study phase", variant: "primary" },
           { href: "/contact", label: "Contact Student Hub", variant: "ghost" },
         ]}
         aside={
           <div className="surface-card rounded-[32px] p-6 sm:p-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand">The problem</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand">
+              The problem
+            </p>
             <ul className="mt-5 space-y-4 text-sm leading-7 text-ink-muted">
               <li>Students choose majors with limited structure or visibility.</li>
               <li>Training opportunities are often fragmented and difficult to compare.</li>
@@ -44,7 +79,9 @@ export default function AboutPage() {
               <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand/12 text-brand">
                 <Target className="h-6 w-6" />
               </div>
-              <h2 className="font-display text-3xl font-semibold tracking-tight text-ink">Mission</h2>
+              <h2 className="font-display text-3xl font-semibold tracking-tight text-ink">
+                Mission
+              </h2>
               <p className="mt-4 text-sm leading-8 text-ink-muted">
                 Help people make smarter academic and career decisions by connecting study guidance,
                 practical training, and employability support in one coherent platform.
@@ -56,7 +93,9 @@ export default function AboutPage() {
               <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand/12 text-brand">
                 <Globe2 className="h-6 w-6" />
               </div>
-              <h2 className="font-display text-3xl font-semibold tracking-tight text-ink">Vision</h2>
+              <h2 className="font-display text-3xl font-semibold tracking-tight text-ink">
+                Vision
+              </h2>
               <p className="mt-4 text-sm leading-8 text-ink-muted">
                 Start in Bahrain with high local relevance, then grow into a wider GCC platform that
                 keeps academic and employability guidance clear, practical, and trustworthy.
@@ -71,31 +110,23 @@ export default function AboutPage() {
           <Reveal>
             <SectionHeading
               eyebrow="How the model works"
-              title="Student Hub connects three phases that are usually treated separately."
-              description="The platform is intentionally structured around a progression: first choose wisely, then build practical readiness, then move into employment with more support and visibility."
+              title="Student Hub is designed as a three-phase model, with Study leading the current release."
+              description="The platform is intentionally structured around a progression: first choose wisely, then build practical readiness, then move into employment with more support and visibility. The public launch is simply focusing the first release more narrowly."
             />
           </Reveal>
           <div className="grid gap-4">
-            {[
-              {
-                icon: Milestone,
-                title: "Study",
-                copy: "University discovery, university comparison, Bahrain market awareness, and major advising help users make better early choices.",
-              },
-              {
-                icon: Flag,
-                title: "Train",
-                copy: "Courses, internships, workshops, and Tamkeen-supported programs help students gain practical capability before applying for work.",
-              },
-              {
-                icon: Globe2,
-                title: "Work",
-                copy: "Job listings, CV services, and interview-booking concepts help graduates move into work with stronger preparation.",
-              },
-            ].map((item, index) => (
+            {modelCards.map((item, index) => (
               <Reveal key={item.title} delay={index * 0.05}>
                 <div className="surface-card rounded-[28px] p-6">
-                  <h3 className="font-display text-xl font-semibold tracking-tight text-ink">{item.title}</h3>
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand/12 text-brand">
+                    <item.icon className="h-6 w-6" />
+                  </div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand">
+                    {item.status}
+                  </p>
+                  <h3 className="mt-3 font-display text-xl font-semibold tracking-tight text-ink">
+                    {item.title}
+                  </h3>
                   <p className="mt-3 text-sm leading-7 text-ink-muted">{item.copy}</p>
                 </div>
               </Reveal>
@@ -108,7 +139,9 @@ export default function AboutPage() {
         <Container className="grid gap-5 lg:grid-cols-2">
           <Reveal>
             <div className="surface-card rounded-[30px] p-7 sm:p-9">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand">Why Bahrain first</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand">
+                Why Bahrain first
+              </p>
               <p className="mt-4 text-sm leading-8 text-ink-muted">
                 Starting in Bahrain keeps the product grounded in a specific academic and employment
                 context. That focus makes the first version more useful, more credible, and easier to
@@ -118,7 +151,9 @@ export default function AboutPage() {
           </Reveal>
           <Reveal delay={0.08}>
             <div className="surface-card rounded-[30px] p-7 sm:p-9">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand">Long-term ambition</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand">
+                Long-term ambition
+              </p>
               <p className="mt-4 text-sm leading-8 text-ink-muted">
                 The structure is designed to scale to the GCC and beyond by expanding university data,
                 training partnerships, employer pathways, and localized service layers.
@@ -139,11 +174,15 @@ export default function AboutPage() {
             {roadmap.map((item, index) => (
               <Reveal key={item.phase} delay={index * 0.05}>
                 <div className="surface-card rounded-[28px] p-6">
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand">{item.phase}</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand">
+                    {item.phase}
+                  </p>
                   <h3 className="mt-4 font-display text-2xl font-semibold tracking-tight text-ink">
                     {item.title}
                   </h3>
-                  <p className="mt-3 text-sm leading-7 text-ink-muted">{item.description}</p>
+                  <p className="mt-3 text-sm leading-7 text-ink-muted">
+                    {item.description}
+                  </p>
                 </div>
               </Reveal>
             ))}
@@ -155,8 +194,12 @@ export default function AboutPage() {
         <Container>
           <Reveal>
             <div className="surface-card rounded-[32px] p-8 sm:p-10">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand">Founder</p>
-              <h2 className="mt-4 font-display text-4xl font-semibold tracking-tight text-ink">{founder.name}</h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand">
+                Founder
+              </p>
+              <h2 className="mt-4 font-display text-4xl font-semibold tracking-tight text-ink">
+                {founder.name}
+              </h2>
               <p className="mt-2 text-sm font-medium text-ink-muted">{founder.title}</p>
               <p className="mt-5 max-w-3xl text-sm leading-8 text-ink-muted">{founder.bio}</p>
               <div className="mt-6 flex flex-wrap gap-3">

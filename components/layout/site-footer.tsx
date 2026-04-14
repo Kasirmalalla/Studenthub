@@ -3,7 +3,10 @@ import { Globe, Mail, MapPin, MessageCircleMore } from "lucide-react";
 
 import { BrandMark } from "@/components/layout/brand-mark";
 import { Container } from "@/components/ui/container";
+import { isPhaseEnabled } from "@/data/feature-flags";
 import { footerLinks, navItems } from "@/data/site";
+
+const studyOnlyRollout = !isPhaseEnabled("train") && !isPhaseEnabled("work");
 
 export function SiteFooter() {
   return (
@@ -12,8 +15,9 @@ export function SiteFooter() {
         <div className="space-y-5">
           <BrandMark className="[&_*]:text-white" />
           <p className="max-w-md text-sm leading-7 text-white/70">
-            Student Hub is a Bahrain-first platform connecting study choices, training opportunities,
-            and work readiness into one clearer journey.
+            {studyOnlyRollout
+              ? "Student Hub is currently rolling out the Study phase first in Bahrain, with Train and Work being refined for a later public release."
+              : "Student Hub is a Bahrain-first platform connecting study choices, training opportunities, and work readiness into one clearer journey."}
           </p>
           <div className="flex flex-wrap gap-4 text-sm text-white/75">
             <span className="inline-flex items-center gap-2">
