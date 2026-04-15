@@ -16,6 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/study/universities",
     "/study/comparison",
     "/study/market-needs",
+    "/study/psychometric-test",
     "/study/major-advising",
     ...(isPhaseEnabled("train")
       ? [

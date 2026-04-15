@@ -7,6 +7,7 @@ import {
   BriefcaseBusiness,
   Building2,
   CalendarSearch,
+  ClipboardCheck,
   ClipboardList,
   Compass,
   FileText,
@@ -37,6 +38,7 @@ const iconMap: Record<string, LucideIcon> = {
   growth: Rocket,
   clarity: Lightbulb,
   booking: CalendarSearch,
+  psychometric: ClipboardCheck,
 };
 
 type IconTokenProps = {

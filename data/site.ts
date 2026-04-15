@@ -158,6 +158,16 @@ export const studyArchitecture: RouteHighlight[] = [
     detail: "Placeholder visual insights",
   },
   {
+    icon: "psychometric",
+    title: "Take a Psychometric Test",
+    description:
+      "Help students explore which majors may suit their interests, strengths, and preferences.",
+    href: "/study/psychometric-test",
+    kicker: "Major match guidance",
+    detail: "Interest and preference fit",
+    ctaLabel: "Start Test",
+  },
+  {
     icon: "advisor",
     title: "Major Advising",
     description:
@@ -283,6 +293,12 @@ const allFeaturePreviews: Array<PhaseTagged<FeaturePreview>> = [
     title: "Major Advising",
     description:
       "Book paid advising sessions with specialists who can translate options into next steps.",
+  },
+  {
+    phase: "study",
+    title: "Major Match Test",
+    description:
+      "Use RIASEC-style interests and preference signals to explore best-fit bachelor major directions.",
   },
   {
     phase: "train",

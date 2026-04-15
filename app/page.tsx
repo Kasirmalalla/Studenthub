@@ -1,5 +1,6 @@
 import {
   ArrowLeftRight,
+  BrainCircuit,
   BriefcaseBusiness,
   Building2,
   CalendarDays,
@@ -31,7 +32,7 @@ import { buildMetadata } from "@/lib/utils";
 export const metadata = buildMetadata({
   title: "Home",
   description:
-    "Student Hub is currently launching with Study first, helping students compare universities, majors, and advising options with more clarity in Bahrain.",
+    "Student Hub is currently launching with Study first, helping students test major fit, compare universities, review majors, and book advising in Bahrain.",
   path: "/",
 });
 
@@ -92,15 +93,24 @@ const trustSignals = studyOnlyRollout
 const studyLaunchJourney = [
   {
     phase: "01",
+    icon: BrainCircuit,
+    title: "Start with a major-fit signal",
+    description:
+      "Use the Major Match Test to see which broad study directions fit interests and preferences before browsing randomly.",
+    detail:
+      "The test gives students a clearer first filter without pretending to make the final decision for them.",
+  },
+  {
+    phase: "02",
     icon: Building2,
     title: "Explore Bahrain universities with structure",
     description:
-      "Start with a guided university, college, and major hierarchy so the first decision feels navigable instead of overwhelming.",
+      "Move into a guided university, college, and major hierarchy so the decision feels navigable instead of overwhelming.",
     detail:
       "This turns early browsing into something closer to a real product workflow than a static directory.",
   },
   {
-    phase: "02",
+    phase: "03",
     icon: ArrowLeftRight,
     title: "Compare study paths before committing",
     description:
@@ -109,7 +119,7 @@ const studyLaunchJourney = [
       "Students can move from broad interest to narrower decisions without leaving the platform.",
   },
   {
-    phase: "03",
+    phase: "04",
     icon: CalendarDays,
     title: "Book advising when uncertainty remains",
     description:
@@ -131,14 +141,14 @@ export default function HomePage() {
         title="A beginning of a successful career, shaped as a practical study-first launch."
         description={
           studyOnlyRollout
-            ? "Student Hub is publicly launching with Study first. Students can already explore universities, compare majors, review Bahrain market context, and book advising while Train and Work continue behind the next rollout layer."
+            ? "Student Hub is publicly launching with Study first. Students can already explore universities, compare majors, review Bahrain market context, take the Major Match Test, and book advising while Train and Work continue behind the next rollout layer."
             : "Student Hub helps students and fresh graduates move through one connected path: choose the right academic direction, build practical readiness through training, and move into work with stronger support."
         }
         metrics={homeHeroMetrics}
         actions={[
-          { href: "/study/universities", label: "Browse universities", variant: "primary" },
-          { href: "/study/comparison", label: "Compare options", variant: "ghost" },
-          { href: "/book-online", label: "Book advising", variant: "dark" },
+          { href: "/book-online", label: "Book advising", variant: "primary" },
+          { href: "/study/psychometric-test", label: "Start Major Match Test", variant: "ghost" },
+          { href: "/study/universities", label: "Browse universities", variant: "ghost" },
         ]}
         aside={
           <div className="rounded-[34px] border border-white/10 bg-[#171717] p-6 text-white shadow-[0_28px_64px_rgba(17,17,17,0.26)] sm:p-8">
@@ -184,6 +194,14 @@ export default function HomePage() {
                 </div>
               ) : null}
             </div>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <ButtonLink href="/book-online" variant="primary">
+                Book advising now
+              </ButtonLink>
+              <ButtonLink href="/study/psychometric-test" variant="ghost" className="!text-ink">
+                Start Major Match Test
+              </ButtonLink>
+            </div>
           </div>
         }
       />
@@ -207,7 +225,7 @@ export default function HomePage() {
             }
             description={
               studyOnlyRollout
-                ? "Instead of hinting at future value only, the current release already gives students four practical tools they can use today."
+                ? "Instead of hinting at future value only, the current release already gives students five practical tools they can use today."
                 : "Student Hub is designed so each phase solves a specific problem while still feeling part of one journey."
             }
           />
@@ -221,7 +239,7 @@ export default function HomePage() {
                   The launch experience is shaped around better early decisions.
                 </h2>
                 <p className="mt-4 text-sm leading-8 text-ink-muted">
-                  Student Hub is narrowing the public rollout on purpose: browse universities, compare paths, review market context, and book advising before the later phases reopen.
+                  Student Hub is narrowing the public rollout on purpose: take the Major Match Test, browse universities, compare paths, review market context, and book advising before the later phases reopen.
                 </p>
                 <div className="mt-6 space-y-3">
                   <div className="rounded-[22px] border border-border bg-surface-muted px-4 py-4 text-sm leading-7 text-ink">
@@ -238,7 +256,7 @@ export default function HomePage() {
                   <ButtonLink href="/study" variant="primary">
                     Explore Study
                   </ButtonLink>
-                  <ButtonLink href="/book-online" variant="ghost">
+                  <ButtonLink href="/book-online" variant="ghost" className="!text-ink">
                     Book advising
                   </ButtonLink>
                 </div>
@@ -447,7 +465,7 @@ export default function HomePage() {
                 <ButtonLink href="/study" variant="primary">
                   Explore Study
                 </ButtonLink>
-                <ButtonLink href="/book-online" variant="ghost">
+                <ButtonLink href="/book-online" variant="ghost" className="!text-ink">
                   Book advising
                 </ButtonLink>
               </div>

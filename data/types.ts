@@ -35,6 +35,7 @@ export type RouteHighlight = {
   href: string;
   kicker?: string;
   detail?: string;
+  ctaLabel?: string;
 };
 
 export type JourneyStep = {

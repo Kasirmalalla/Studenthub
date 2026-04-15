@@ -32,7 +32,7 @@ export function RouteCard({ item, className }: RouteCardProps) {
         <h3 className="mt-3 font-display text-2xl font-semibold tracking-tight text-ink">{item.title}</h3>
         <p className="mt-3 text-sm leading-7 text-ink-muted">{item.description}</p>
         <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-ink">
-          Explore route
+          {item.ctaLabel ?? "Explore route"}
           <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
         </div>
       </div>
